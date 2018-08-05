@@ -13,7 +13,7 @@ if [ -b /dev/mmcblk0p7 ]; then
 else
   sudo cp ./usr/cmdline.txt /boot/
 fi
-sudo cp /etc/inittab /etc/inittab.preLCD35-show
+[[ -e /etc/inittab ]] && sudo cp /etc/inittab /etc/inittab.preLCD35-show
 sudo cp ./usr/inittab /etc/
 sudo cp /boot/config.txt /boot/config.txt.preLCD35-show
 sudo cp ./boot/config-35.txt /boot/config.txt
@@ -43,4 +43,4 @@ if grep -q Raspbian /etc/issue; then
   else
     echo "this is not raspberrypi kernel, no need to update touch configure, reboot"
 fi
-sudo reboot
+echo "you need to 'sudo reboot' now!"
