@@ -12,10 +12,9 @@ else
 fi
 sudo cp ./usr/inittab /etc/
 sudo cp ./boot/config-35.txt /boot/config.txt
-nodeplatform=`uname -n`
 kernel=`uname -r`
 version=`uname -v`
-if test "$nodeplatform" = "raspberrypi";then
+if grep -q Raspbian /etc/issue; then
     echo "this is raspberrypi kernel"
     version=${version%% *}
     version=${version#*#}
