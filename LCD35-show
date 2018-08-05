@@ -1,16 +1,21 @@
 #!/bin/bash -x
-sudo rm -rf /etc/X11/xorg.conf.d/40-libinput.conf
+sudo mv /etc/X11/xorg.conf.d/40-libinput.conf /etc/X11/xorg.conf.d/40-libinput.conf.preLCD35-show
 sudo mkdir /etc/X11/xorg.conf.d
 sudo cp ./usr/tft35a-overlay.dtb /boot/overlays/
 sudo cp ./usr/tft35a-overlay.dtb /boot/overlays/tft35a.dtbo
+[[ -e /etc/X11/xorg.conf.d/99-calibration.conf ]] && sudo cp /etc/X11/xorg.conf.d/99-calibration.conf /etc/X11/xorg.conf.d/99-calibration.conf.preLCD35-show
 sudo cp -rf ./usr/99-calibration.conf-35  /etc/X11/xorg.conf.d/99-calibration.conf
+[[ -e /usr/share/X11/xorg.conf.d/99-fbturbo.conf ]] && sudo cp /usr/share/X11/xorg.conf.d/99-fbturbo.conf /usr/share/X11/xorg.conf.d/99-fbturbo.conf.preLCD35-show
 sudo cp -rf ./usr/99-fbturbo.conf  /usr/share/X11/xorg.conf.d/
+sudo cp /boot/cmdline.txt /boot/cmdline.txt.preLCD35-show
 if [ -b /dev/mmcblk0p7 ]; then
   sudo cp ./usr/cmdline.txt-noobs /boot/cmdline.txt
 else
   sudo cp ./usr/cmdline.txt /boot/
 fi
+sudo cp /etc/inittab /etc/inittab.preLCD35-show
 sudo cp ./usr/inittab /etc/
+sudo cp /boot/config.txt /boot/config.txt.preLCD35-show
 sudo cp ./boot/config-35.txt /boot/config.txt
 kernel=`uname -r`
 version=`uname -v`
@@ -23,13 +28,15 @@ if grep -q Raspbian /etc/issue; then
       echo "reboot"
     else
       echo "need to update touch configuration"
-      if test $version -ge 1023;then
-        echo "install xserver-xorg-input-evdev_2.10.5-1"
-        sudo dpkg -i -B xserver-xorg-input-evdev_2.10.5-1_armhf.deb
-      else
-        echo "install xserver-xorg-input-evdev_1%3a2.10.3-1"
-        sudo dpkg -i -B xserver-xorg-input-evdev_1%3a2.10.3-1_armhf.deb
-      fi
+      #if test $version -ge 1023;then
+      #  echo "install xserver-xorg-input-evdev_2.10.5-1"
+      #  sudo dpkg -i -B xserver-xorg-input-evdev_2.10.5-1_armhf.deb
+      #else
+      #  echo "install xserver-xorg-input-evdev_1%3a2.10.3-1"
+      #  sudo dpkg -i -B xserver-xorg-input-evdev_1%3a2.10.3-1_armhf.deb
+      #fi
+      sudo apt-get install xserver-xorg-input-evdev
+      [[ -e /usr/share/X11/xorg.conf.d/45-evdev.conf ]] && sudo cp /usr/share/X11/xorg.conf.d/45-evdev.conf /usr/share/X11/xorg.conf.d/45-evdev.conf.preLCD35-show
       sudo cp -rf /usr/share/X11/xorg.conf.d/10-evdev.conf /usr/share/X11/xorg.conf.d/45-evdev.conf
       echo "reboot"
     fi
